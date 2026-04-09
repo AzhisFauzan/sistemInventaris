@@ -8,12 +8,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="refresh" content="500">
+    <link rel="stylesheet" href="{{ asset('css/page.css') }}">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>@yield("judul")</title>
 
    @include("layout.header")
 </head>
+<style>
+    .container-fluid{
+        background-color: white;
+    }
+    #footer{
+        margin-top: 10px
+    }
 
+    body.sidebar-toggled .topbar {
+        left: 65px !important;
+        width: calc(100% - 65px) !important;
+    }
+
+    body:not(.sidebar-toggled) .topbar {
+        left: 224px !important;
+        width: calc(100% - 224px) !important;
+    }
+
+    body.sidebar-toggled:not(.sidebar-hovering) .topbar {
+        left: 65px !important;
+        width: calc(100% - 65px) !important;
+    }
+
+    body:not(.sidebar-toggled):not(.sidebar-hovering) .topbar {
+        left: 224px !important;
+        width: calc(100% - 224px) !important;
+    }
+
+    /* Temporary hover state */
+    body.sidebar-hovering .topbar {
+        transition: left 0.3s ease, width 0.3s ease !important;
+    }
+
+    .topbar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 999 !important;
+        transition: none !important;
+        min-height: 40px;
+        padding: 0 1rem;
+    }
+
+</style>
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -46,7 +92,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer bg-white" id="footer">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; Your Website 2021</span>
@@ -84,7 +130,39 @@
             </div>
         </div>
     </div>
-    
+    <script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            $('body').addClass('layout-loaded');
+        }, 100);
+    });
+
+    var hoverTimeout;
+    $(".sidebar").on("mouseenter", function () {
+        clearTimeout(hoverTimeout);
+        $('body').addClass('sidebar-hovering');
+
+        if (!sidebarPinned) {
+            $("body").removeClass("sidebar-toggled");
+            $(".sidebar").removeClass("toggled");
+            saveSidebarState(false);
+        }
+    });
+
+    $(".sidebar").on("mouseleave", function () {
+        if (!sidebarPinned) {
+            hoverTimeout = setTimeout(function() {
+                $('body').removeClass('sidebar-hovering');
+                $("body").addClass("sidebar-toggled");
+                $(".sidebar").addClass("toggled");
+                saveSidebarState(true);
+                $('.sidebar .collapse').collapse('hide');
+            }, 200);
+        } else {
+            $('body').removeClass('sidebar-hovering');
+        }
+    });
+    </script>
     @include("layout.footer")
 </body>
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +26,30 @@ class UserCtrl extends Controller
             'password' => $request->password,
             'role'     => $request->role,
         ]);
+
+        return response()->json([
+            'status' => 'success',
+            'name'   => $user->name,
+            'role'   => $user->role,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'role' => 'required',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->role = $request->role;
+
+        if ($request->password != '') {
+            $user->password = $request->password;
+        }
+
+        $user->save();
 
         return response()->json([
             'status' => 'success',

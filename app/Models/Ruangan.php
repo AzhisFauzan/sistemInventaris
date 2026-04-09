@@ -16,6 +16,7 @@ class Ruangan extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'nama_ruangan'
+        'nama_ruangan',
+        'lokasi'
     ];
 }

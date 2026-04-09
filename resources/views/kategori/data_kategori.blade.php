@@ -1,36 +1,64 @@
 @extends('layout.page')
-
+@section("judul","Data Kategori")
 @section('content')
+<style>
+    #thead-table{
+        background-color: purple;
+    }
+    #tr-no-action{
+        color: white
+    }
+     #tbody-user{
+        color:black
+     }
+     .badge-delete{
+        color:red;
+    }
+    </style>
 <div class="row">
-    <div class="col-md-8">
-        <h1 class="h3 mb-2 text-gray-800">Master Kategori Perangkat</h1>
+    <div class="col-md-12">
 
-        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalKategori">
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h3 mb-2 text-gray-800">Master Kategori Perangkat</h1>
+            <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalKategori">
             Add Kategori
-        </button>
-
-        <table class="table table-bordered" id="kategoriTable">
-            <thead>
-                <tr>
-                    <th width="10%">No</th>
-                    <th>Nama Kategori</th>
-                    <th width="20%">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data_kategori as $kategori)
-                <tr id="row-{{ $kategori->id_kategori }}">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $kategori->nama_kategori }}</td>
-                    <td>
-                        <a href="#" class="btn-delete" data-id="{{ $kategori->id_kategori }}">
-                            <span class="badge bg-danger"><i class="fas fa-trash"></i> Hapus</span>
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            </button>
+        </div>
+        <div class="card" style="width: 100%;margin-bottom:100px">
+            <div class="card-body">
+                <table class="table table-striped table-sm" id="kategoriTable">
+                    <thead id="thead-table">
+                        <tr id="tr-no-action">
+                            <th class="text-center" width="0.5%">No</th>
+                            <th class="text-center" width="15%">Nama Kategori</th>
+                            <th class="text-center" width="1%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-user">
+                        @foreach ($data_kategori as $kategori)
+                        <tr id="row-{{ $kategori->id_kategori }}">
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td class="text-center">{{ $kategori->nama_kategori }}</td>
+                            {{-- <td class="text-center">
+                                <a href="#" class="btn-delete" data-id="{{ $kategori->id_kategori }}">
+                                    <span class="badge bg-danger"><i class="fas fa-trash"></i></span>
+                                </a>
+                            </td> --}}
+                            <td class="text-center">
+                            <button class="btn-delete border-0 bg-transparent p-0"
+                                    data-id="{{ $kategori->id_kategori }}"
+                                    type="button">
+                                <span class="badge-delete"><i class="fas fa-trash"></i></span>
+                            </button>
+                        </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
