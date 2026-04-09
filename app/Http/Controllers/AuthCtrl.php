@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\support\Facades\Auth;
-use Illuminate\support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class AuthCtrl extends Controller
