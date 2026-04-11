@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Providers;
-
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL; // 1. Tambahkan baris ini di bagian atas
 

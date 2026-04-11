@@ -104,4 +104,63 @@ class LaporanCtrl extends Controller
             'Content-Disposition' => "attachment; filename=\"$namaFile\"",
         ]);
     }
+
+    public function maintenance(Request $request)
+    {
+        $ruangans = DB::table('ruangan')->orderBy('nama_ruangan')->get();
+        $kategoris = DB::table('kategori_perangkat')->orderBy('nama_kategori')->get();
+
+        $query = DB::table('maintenance as m')
+            ->leftJoin('kategori_perangkat as k', 'm.id_kategori', '=', 'k.id_kategori')
+            ->leftJoin('ruangan as r', 'm.id_ruangan', '=', 'r.id_ruangan')
+            ->select('m.*', 'k.nama_kategori', 'r.nama_ruangan');
+
+        if ($request->filled('id_ruangan')) {
+            $query->where('m.id_ruangan', $request->id_ruangan);
+        }
+
+        if ($request->filled('id_kategori')) {
+            $query->where('m.id_kategori', $request->id_kategori);
+        }
+
+        if ($request->filled('dari')) {
+            $query->whereDate('m.tanggal', '>=', $request->dari);
+        }
+
+        if ($request->filled('sampai')) {
+            $query->whereDate('m.tanggal', '<=', $request->sampai);
+        }
+
+        $maintenances = $query->orderBy('m.tanggal', 'desc')->get();
+
+        return view('laporan.maintenance', compact('maintenances', 'ruangans', 'kategoris'));
+    }
+
+    public function printMaintenance(Request $request)
+    {
+        $query = DB::table('maintenance as m')
+            ->join('kategori_perangkat as k', 'm.id_kategori', '=', 'k.id_kategori')
+            ->join('ruangan as r', 'm.id_ruangan', '=', 'r.id_ruangan')
+            ->select('m.*', 'k.nama_kategori', 'r.nama_ruangan');
+
+        if ($request->filled('id_ruangan')) {
+            $query->where('m.id_ruangan', $request->id_ruangan);
+        }
+        if ($request->filled('id_kategori')) {
+            $query->where('m.id_kategori', $request->id_kategori);
+        }
+        if ($request->filled('dari')) {
+            $query->whereDate('m.tanggal', '>=', $request->dari);
+        }
+        if ($request->filled('sampai')) {
+            $query->whereDate('m.tanggal', '<=', $request->sampai);
+        }
+
+        $maintenances = $query->orderBy('m.tanggal', 'desc')->get();
+
+        $pdf = Pdf::loadView('laporan.maintenance_pdf', compact('maintenances'))
+                ->setPaper('a4', 'landscape');
+
+        return $pdf->stream('laporan-maintenance-' . now()->format('Ymd') . '.pdf');
+    }
 }

@@ -304,8 +304,6 @@
 
     <!-- ══ LEFT: FORM ══ -->
     <div class="form-panel">
-
-        <!-- Brand -->
         <div class="brand">
             <div class="brand-icon"><i class="fas fa-box-archive"></i></div>
             <span class="brand-name">RS Darmayu</span>
@@ -316,7 +314,6 @@
             <p class="form-tag">Selamat datang kembali</p>
             <h1 class="form-title">Masuk ke Sistem<br>Inventaris</h1>
             <p class="form-subtitle">Masukkan kredensial Anda untuk melanjutkan</p>
-
             <form method="post" action="{{ url('login/check') }}">
                 @csrf
 
@@ -355,10 +352,10 @@
                     </div>
                 </div>
 
-                <!-- Forgot -->
+                <!-- Forgot
                 <div class="forgot-row">
                     <a href="#!" class="forgot-link">Lupa password?</a>
-                </div>
+                </div>-->
 
                 <!-- Submit -->
                 <button type="submit" class="btn-submit">

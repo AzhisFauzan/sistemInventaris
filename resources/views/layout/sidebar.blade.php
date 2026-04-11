@@ -194,6 +194,10 @@
                         href="{{ url('/laporan/inventaris') }}">
                         <i class="fas fa-desktop fa-sm mr-2"></i> Inventaris
                     </a>
+                    <a class="collapse-item {{ request()->is('laporan/maintenance*') ? 'active' : '' }}"
+                        href="{{ url('/laporan/maintenance') }}">
+                        <i class="fas fa-desktop fa-sm mr-2"></i> Maintenance
+                    </a>
                     {{-- <a class="collapse-item {{ request()->is('laporan/maintenance*') ? 'active' : '' }}"
                         href="{{ url('/laporan/maintenance') }}">
                         <i class="fas fa-calendar-alt fa-sm mr-2"></i> Data Maintenance
