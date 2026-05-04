@@ -10,9 +10,6 @@ use App\Http\Controllers\MaintenanceCtrl;
 use App\Http\Controllers\RuanganCtrl;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/',[AuthCtrl::class, 'login']);
 Route::post('/login/check',[AuthCtrl::class, 'proses_login'])->name('login.check');
@@ -52,10 +49,13 @@ Route::post('/maintenance/maintenance', [MaintenanceCtrl::class, 'store_maintena
 Route::get('/maintenance/riwayat_maintenance', [MaintenanceCtrl::class, 'riwayat_maintenance']);
 Route::post('/maintenance/destroy', [MaintenanceCtrl::class, 'destroy_maintenance']);
 
+
+
+
 Route::prefix('laporan')->middleware('auth')->group(function () {
     Route::get('/inventaris', [LaporanCtrl::class, 'inventaris'])->name('laporan.inventaris');
     Route::get('/inventaris/print', [LaporanCtrl::class, 'inventarisPrint'])->name('laporan.inventaris.print');
     Route::get('/inventaris/excel', [LaporanCtrl::class, 'inventarisExcel'])->name('laporan.inventaris.excel');
     Route::get('/maintenance', [LaporanCtrl::class, 'maintenance'])->name('laporan.maintenance');
     Route::get('/maintenance/print', [LaporanCtrl::class, 'printMaintenance'])->name('laporan.maintenance.print');
-});
+    });

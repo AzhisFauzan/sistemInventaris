@@ -16,8 +16,19 @@ class AuthCtrl extends Controller
     public function proses_login(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'password' => 'required'
+            'name' => [
+                'required',
+                'regex:/^[A-Z\s]+$/',
+            ],
+            'password' => [
+                'required',
+                'max:10',
+            ]
+        ], [
+            'name.regex' => 'Username harus menggunakan huruf besar semua.',
+            'password.max' => 'Password maximal harus 10 karakter.',
+            'name.required' => 'Username tidak boleh kosong.',
+            'password.required' => 'Password tidak boleh kosong.',
         ]);
 
         $user = DB::table('users')
@@ -27,16 +38,10 @@ class AuthCtrl extends Controller
 
         if ($user) {
             Auth::loginUsingId($user->id);
-
-            if ($user->role == 'admin') {
-                return redirect('/dashboard')->with('pesan', 'Login Admin Success');
-            } elseif ($user->role == 'teknisi') {
-                return redirect('/inventaris')->with('pesan', 'Login Pegawai Success');
-            }
+            return redirect('/dashboard')->with('pesan', 'Login Success');
         }
 
-        return back()->with('error', 'Login gagal, password salah');
-
+        return back()->withErrors(['login_error' => 'Username atau Password salah!'])->withInput();
     }
 
     public function logout(Request $request)

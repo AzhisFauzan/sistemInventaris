@@ -2,162 +2,379 @@
 @section("judul","Riwayat Maintenance")
 @section('content')
 
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+        /* Warna Khas RS Darmayu */
+        --rs-purple:       #6b21a8; /* Ungu Utama */
+        --rs-purple-hover: #581c87;
+        --rs-purple-soft:  #f3e8ff;
+        --rs-purple-mid:   #d8b4fe;
+
+        --rs-green:        #16a34a; /* Hijau Utama */
+        --rs-green-hover:  #15803d;
+        --rs-green-soft:   #dcfce7;
+
+        --slate:     #f8fafc;
+        --border:    #cbd5e1;
+        --text-main: #0f172a;
+        --text-sub:  #475569;
+    }
+
+    * { box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+
+    /* ── Page Header ── */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 4px 0;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .page-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: -0.3px;
+        margin: 0;
+    }
+
+    /* Tombol Kembali */
+    .btn-kembali {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        color: var(--text-main);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none !important;
+        transition: all .15s;
+    }
+    .btn-kembali:hover {
+        background: var(--slate);
+        border-color: var(--rs-purple-mid);
+        color: var(--rs-purple);
+    }
+
+    /* ── Filter Kategori Dropdown ── */
+    .filter-wrapper {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+    }
+    .filter-label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-main);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        margin-bottom: 10px;
+    }
+    .select-kategori {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-main);
+        background: #fff;
+        outline: none;
+        min-width: 240px;
+        cursor: pointer;
+    }
+    .select-kategori:focus { border-color: var(--rs-purple); }
+
+    /* ── Table Card ── */
+    .table-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 40px;
+        box-shadow: 0 1px 8px rgba(0,0,0,.03);
+    }
+
+    #tabelRiwayat {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+    #tabelRiwayat thead tr { background: var(--rs-purple); }
+    #tabelRiwayat thead th {
+        padding: 14px 16px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+        border: none;
+        text-align: left;
+    }
+    #tabelRiwayat thead th.text-center { text-align: center; }
+
+    #tabelRiwayat tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background .12s;
+    }
+    #tabelRiwayat tbody tr:last-child { border-bottom: none; }
+    #tabelRiwayat tbody tr:hover { background: var(--slate); }
+
+    #tabelRiwayat td {
+        padding: 14px 16px;
+        vertical-align: middle;
+        color: var(--text-main);
+    }
+
+    .room-name-text { font-weight: 700; color: var(--rs-purple); }
+
+    .badge-kategori {
+        display: inline-block;
+        background: var(--rs-purple-soft);
+        color: var(--rs-purple);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        border: 1px solid var(--rs-purple-mid);
+    }
+
+    /* ── Action buttons ── */
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        background: transparent;
+        cursor: pointer;
+        transition: all .15s;
+        font-size: 13px;
+        color: var(--rs-purple);
+    }
+    .btn-icon:hover { background: var(--rs-purple-soft); border-color: var(--rs-purple-mid); }
+
+    /* ── Modal Detail ── */
+    .modal-content { border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .mhead {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        background: var(--rs-purple);
+    }
+    .mhead .modal-title { font-size: 15px; font-weight: 700; color: #fff; margin: 0; }
+    .mhead .close { color: #fff; opacity: .85; border:none; background:none; font-size: 20px; cursor:pointer; }
+
+    .modal-body { padding: 20px 24px; }
+    .modal-footer { border-top: 1px solid var(--slate); padding: 14px 24px; background: #fff; }
+
+    /* UI Detail List Clean */
+    .detail-list { display: flex; flex-direction: column; gap: 10px; }
+    .detail-item {
+        padding: 12px 14px;
+        background: var(--slate);
+        border-radius: 8px;
+        border: 1px solid var(--border);
+    }
+    .detail-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-sub);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+    }
+    .detail-value { font-size: 13px; font-weight: 700; color: var(--text-main); }
+    .detail-value-desc {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-main);
+        line-height: 1.5;
+        margin-top: 6px;
+        background: #fff;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+    }
+
+    .btn-tutup-detail {
+        padding: 8px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        border-radius: 6px;
+        background: #475569;
+        color: #fff;
+        cursor: pointer;
+        transition: background .15s;
+    }
+    .btn-tutup-detail:hover { background: #334155; }
+
+    .empty-state { text-align: center; padding: 50px 20px; color: var(--text-sub); }
+</style>
+
 <div class="row">
-    <div class="col-md-12 mb-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h3 mb-2 text-gray-800">Riwayat Maintenance</h1>
-            <a href="{{ url('maintenance/maintenance') }}" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-calendar-alt mr-1"></i> Jadwal Maintenance
-            </a>
+<div class="col-md-12 mb-3">
+
+    {{-- ── Page Header ── --}}
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-history mr-2" style="color: var(--rs-purple);"></i>Riwayat Maintenance
+        </h1>
+        <a href="{{ url('maintenance/maintenance') }}" class="btn-kembali">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius:8px; font-size:13px; font-weight:600; background:var(--rs-green-soft); color:var(--rs-green-hover); border:1px solid #bbf7d0; padding: 12px 16px;">
+            <i class="fas fa-check-circle mr-1"></i> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" style="padding-top: 8px; border:none; background:none; color:var(--rs-green-hover);"><span>&times;</span></button>
+        </div>
+    @endif
+
+    {{-- ── Filter Dropdown ── --}}
+    <div class="filter-wrapper">
+        <span class="filter-label">Filter Berdasarkan Kategori</span>
+        <select id="filterKategoriRiwayat" class="select-kategori">
+            <option value="all">Semua Kategori</option>
+            @foreach($kategoriPerangkat as $namaKategori => $items)
+                @php $kat = $items->first(); @endphp
+                <option value="{{ $kat->id_kategori }}">{{ $namaKategori }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    {{-- ── Table Card ── --}}
+    <div class="table-card">
+        <div style="overflow-x: auto;">
+            <table id="tabelRiwayat">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width:60px">No</th>
+                        <th>Ruangan</th>
+                        <th>Perangkat</th>
+                        <th>Tanggal Selesai</th>
+                        <th>Teknisi</th>
+                        <th>Deskripsi Pekerjaan</th>
+                        <th class="text-center" style="width:100px">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($riwayat as $i => $item)
+                    <tr class="riwayat-row" data-kategori="{{ $item->id_kategori }}">
+                        <td class="text-center">{{ $i + 1 }}</td>
+                        <td class="room-name-text">{{ $item->nama_ruangan }}</td>
+                        <td>
+                            <span class="badge-kategori">{{ $item->nama_kategori }}</span>
+                        </td>
+                        <td style="font-weight: 500;">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y, H:i') }}</td>
+                        <td style="font-weight: 600;">{{ $item->nama_teknisi ?? '-' }}</td>
+                        <td style="color: var(--text-sub); font-size: 12px;">
+                            {{ Str::limit($item->deskripsi, 45) }}
+                        </td>
+                        <td class="text-center">
+                            <button class="btn-icon btn-detail-riwayat"
+                                data-id="{{ $item->id_maintenance }}"
+                                data-toggle="modal"
+                                data-target="#modalDetailRiwayat"
+                                title="Lihat Detail">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <i class="fas fa-inbox mb-3" style="font-size:32px; color: var(--border);"></i>
+                                <p style="margin:0; font-size:14px; font-weight:700; color: var(--text-main);">Belum ada riwayat maintenance.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <i class="fas fa-history mr-2"></i>Riwayat Maintenance
-            </div>
-            <div class="card-body">
-
-                <ul class="nav nav-pills mb-3" id="filterKategoriRiwayat">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-kategori="all">Semua</a>
-                    </li>
-                    @foreach($kategoriPerangkat as $namaKategori => $items)
-                        @php $kat = $items->first(); @endphp
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-kategori="{{ $kat->id_kategori }}">
-                                {{ $namaKategori }}
-                                <span class="badge badge-light ml-1">
-                                    {{ $riwayat->where('id_kategori', $kat->id_kategori)->count() }}
-                                </span>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-
-                <div class="table-responsive">
-                    <table class="table table-hover" id="tabelRiwayat">
-                        <thead class="thead-light">
-                            <tr>
-                                <th style="width:5%">No</th>
-                                <th>Ruangan</th>
-                                <th>Perangkat</th>
-                                <th>Tanggal</th>
-                                <th>Teknisi</th>
-                                <th>Deskripsi</th>
-                                <th style="width:8%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($riwayat as $i => $item)
-                            <tr class="riwayat-row" data-kategori="{{ $item->id_kategori }}">
-                                <td>{{ $i + 1 }}</td>
-                                <td class="font-weight-bold">{{ $item->nama_ruangan }}</td>
-                                <td>
-                                    <span class="badge badge-info">{{ $item->nama_kategori }}</span>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y, H:i') }}</td>
-                                <td>{{ $item->nama_teknisi ?? '-' }}</td>
-                                <td>{{ Str::limit($item->deskripsi, 50) }}</td>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm btn-detail-riwayat"
-                                        data-id="{{ $item->id_maintenance }}"
-                                        data-toggle="modal"
-                                        data-target="#modalDetailRiwayat">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="7" class="text-center text-muted py-4">
-                                    <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
-                                    Belum ada riwayat maintenance.
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="text-center text-muted py-4 d-none" id="pesanKosongRiwayat">
-                    <i class="fas fa-search fa-2x mb-2 d-block"></i>
-                    Tidak ada riwayat untuk kategori ini.
-                </div>
-
-            </div>
-            <div class="card-footer text-muted" style="font-size:0.85rem;">
-                Total: <strong>{{ $riwayat->count() }}</strong> riwayat maintenance
-            </div>
+        <div class="empty-state d-none" id="pesanKosongRiwayat">
+            <i class="fas fa-search mb-3" style="font-size:32px; color: var(--border);"></i>
+            <p style="margin:0; font-size:14px; font-weight:700; color: var(--text-main);">Tidak ada riwayat ditemukan.</p>
         </div>
     </div>
+
+</div>
 </div>
 
-{{-- Modal Detail --}}
+{{-- ═══════════════════════════════════════
+     MODAL DETAIL
+════════════════════════════════════════ --}}
 <div class="modal fade" id="modalDetailRiwayat" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">
-                    <i class="fas fa-history mr-2"></i>Detail Riwayat Maintenance
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+            <div class="mhead">
+                <h5 class="modal-title">Informasi Maintenance</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="riwayat-loading" class="text-center py-4">
-                    <div class="spinner-border text-info" role="status"></div>
-                    <p class="mt-2 text-muted">Memuat data...</p>
+                    <div class="spinner-border" style="color:var(--rs-purple); width:28px;height:28px;border-width:2px;" role="status"></div>
+                    <p class="mt-2 text-muted" style="font-size:13px;font-weight:600;">Memuat data...</p>
                 </div>
+
                 <div id="riwayat-content" style="display:none;">
-                    <table class="table table-borderless mb-0">
-                        <tbody>
-                            <tr>
-                                <th width="38%" class="text-muted">Ruangan</th>
-                                <td>: <span id="r-ruangan">-</span></td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted">Perangkat</th>
-                                <td>: <span id="r-kategori">-</span></td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted">Tanggal</th>
-                                <td>: <span id="r-tanggal">-</span></td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted">Teknisi</th>
-                                <td>: <span id="r-teknisi">-</span></td>
-                            </tr>
-                            <tr>
-                                <th class="text-muted">Deskripsi</th>
-                                <td>: <span id="r-deskripsi">-</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="detail-list">
+                        <div class="detail-item">
+                            <div class="detail-label">Ruangan</div>
+                            <div class="detail-value" id="r-ruangan">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Waktu Selesai</div>
+                            <div class="detail-value" id="r-tanggal">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Dikerjakan Oleh</div>
+                            <div class="detail-value" id="r-teknisi">-</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Kategori Perangkat</div>
+                            <div class="detail-value" id="r-kategori" style="margin-top:6px;">-</div>
+                        </div>
+                        <div class="detail-item" style="background:transparent; border:none; padding:0;">
+                            <div class="detail-label">Deskripsi Laporan</div>
+                            <div class="detail-value-desc" id="r-deskripsi">-</div>
+                        </div>
+                    </div>
                 </div>
-                <div id="riwayat-error" class="alert alert-danger d-none">
+
+                <div id="riwayat-error" class="alert alert-danger d-none" style="font-size:13px; font-weight:600; border-radius:8px;">
                     Gagal memuat data. Silakan coba lagi.
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            <div class="modal-footer d-flex justify-content-end">
+                <button type="button" class="btn-tutup-detail" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// Filter Kategori
-$(document).on('click', '#filterKategoriRiwayat .nav-link', function(e){
-    e.preventDefault();
-    $('#filterKategoriRiwayat .nav-link').removeClass('active');
-    $(this).addClass('active');
-
-    var kategori = $(this).data('kategori');
+// Filter Kategori Dropdown
+$('#filterKategoriRiwayat').on('change', function(){
+    var kategori = $(this).val();
     var ada = false;
 
     $('.riwayat-row').each(function(){
@@ -166,10 +383,11 @@ $(document).on('click', '#filterKategoriRiwayat .nav-link', function(e){
         if(match) ada = true;
     });
 
+    $('#tabelRiwayat').toggle(ada);
     $('#pesanKosongRiwayat').toggleClass('d-none', ada);
 });
 
-// Modal Detail
+// Modal Detail Ajax
 $(document).on('click', '.btn-detail-riwayat', function(){
     var id = $(this).data('id');
     $('#riwayat-loading').show();
@@ -180,20 +398,18 @@ $(document).on('click', '.btn-detail-riwayat', function(){
         url: "{{ url('maintenance/detail') }}/" + id,
         method: 'GET',
         success: function(data){
-            $('#r-ruangan').text(data.nama_ruangan  ?? '-');
-            $('#r-tanggal').text(data.tanggal       ?? '-');
+            $('#r-ruangan').text(data.nama_ruangan ?? '-');
+            $('#r-tanggal').text(data.tanggal      ?? '-');
             $('#r-teknisi').text(data.nama_teknisi  ?? '-');
-            $('#r-deskripsi').text(data.deskripsi   ?? '-');
+            $('#r-deskripsi').text(data.deskripsi   ?? 'Tidak ada catatan.');
 
-            var kategoriHtml = '';
+            var katHtml = '';
             if(data.kategoris && data.kategoris.length > 0){
-                $.each(data.kategoris, function(i, kat){
-                    kategoriHtml += '<span class="badge badge-info mr-1">' + kat.nama_kategori + '</span>';
+                $.each(data.kategoris, function(i, k){
+                    katHtml += '<span class="badge-kategori" style="margin: 0 4px 4px 0;">' + k.nama_kategori + '</span>';
                 });
-            } else {
-                kategoriHtml = '-';
-            }
-            $('#r-kategori').html(kategoriHtml);
+            } else { katHtml = '-'; }
+            $('#r-kategori').html(katHtml);
 
             $('#riwayat-loading').hide();
             $('#riwayat-content').show();

@@ -8,7 +8,7 @@
         <div style="line-height: 2.0;">
         <span class="d-block font-weight-bold" style="font-size: 0.85rem; font-family: 'Poppins', 'Segoe UI', sans-serif; color: #1a1a1a; letter-spacing: 0.2px;">Selamat Datang,
         </span>
-        <span class="d-block" style="font-size: 0.70rem; font-family: 'Poppins', 'Segoe UI', sans-serif; color: #1a1a1a; letter-spacing: 0.2px; text-decoration: underline;">{{ ucfirst(Auth::user()->role) }}</span>
+        <span class="d-block font-weight-bold" style="font-size: 0.70rem; font-family: 'Poppins', 'Segoe UI', sans-serif; color: #1a1a1a; letter-spacing: 0.2px;">{{ ucfirst(Auth::user()->name) }}</span>
     </div>
 
     <!-- Topbar Navbar -->
@@ -17,7 +17,7 @@
            <a class="nav-link py-1" href="#" id="userDropdownBtn" style="display: flex; align-items: center; background-color: white;">
                 <i class="fas fa-user-circle fa-2x" style="margin-right: 10px; color: gray;"></i>
                 <div class="d-none d-lg-block text-left" style="line-height: 1.2;">
-                    <span class="d-block font-weight-bold" style="font-size: 0.85rem; font-family: 'Poppins', 'Segoe UI', sans-serif; color: #1a1a1a; letter-spacing: 0.2px;">{{ Auth::user()->name }}</span>
+                    <span class="d-block font-weight-bold" style="font-size: 0.85rem; font-family: 'Poppins', 'Segoe UI', sans-serif; color: #1a1a1a; letter-spacing: 0.2px;">{{ ucfirst(Auth::user()->role) }}</span>
                 </div>
             </a>
 

@@ -36,6 +36,7 @@ class PerangkatCtrl extends Controller
     {
         $request->validate([
             'id_ruangan_tujuan' => 'required|exists:ruangan,id_ruangan',
+            'tanggal_pindah'    => 'required|date',
         ]);
 
         $perangkat = DB::table('perangkat as a')
@@ -54,13 +55,12 @@ class PerangkatCtrl extends Controller
             ->where('id_perangkat', $id_perangkat)
             ->update([
                 'id_ruangan'        => $request->id_ruangan_tujuan,
-                'dipindahkan_oleh'  => $user->name,   // simpan nama user
-                'role_pemindah'     => $user->role,   // simpan role user
+                'dipindahkan_oleh'  => $user->name,
+                'role_pemindah'     => $user->role,
+                'tanggal_pindah'    => $request->tanggal_pindah,
             ]);
 
-        $ruangan_tujuan = DB::table('ruangan')
-            ->where('id_ruangan', $request->id_ruangan_tujuan)
-            ->first();
+        $ruangan_tujuan = DB::table('ruangan')->where('id_ruangan', $request->id_ruangan_tujuan)->first();
 
         return redirect()->back()
             ->with('success',
@@ -103,7 +103,8 @@ class PerangkatCtrl extends Controller
             'tipe'            => $request->tipe,
             'id_ruangan'      => $request->id_ruangan,
             'dipindahkan_oleh' => null,
-            'role_pemindah' => null
+            'role_pemindah' => null,
+            'tanggal_pemidah' => null,
         ]);
 
         return back()->with('success', 'Data Perangkat berhasil ditambahkan.');
@@ -121,7 +122,8 @@ class PerangkatCtrl extends Controller
             'tipe'            => $request->tipe,
             'id_ruangan'      => $request->id_ruangan,
             'dipindahkan_oleh' => null,
-            'role_pemindah' => null
+            'role_pemindah' => null,
+            'tanggal_pemindah' => null,
         ]);
 
         return back()->with('success', 'Data Perangkat berhasil diperbarui.');

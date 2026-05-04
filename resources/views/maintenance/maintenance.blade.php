@@ -3,8 +3,28 @@
 @section('content')
 
 <style>
-    * { box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
+    :root {
+        /* Warna Khas RS Darmayu */
+        --rs-purple:       #6b21a8; /* Ungu Utama */
+        --rs-purple-hover: #581c87;
+        --rs-purple-soft:  #f3e8ff;
+        --rs-purple-mid:   #d8b4fe;
+
+        --rs-green:        #16a34a; /* Hijau Utama */
+        --rs-green-hover:  #15803d;
+        --rs-green-soft:   #dcfce7;
+
+        --slate:     #f8fafc;
+        --border:    #cbd5e1;
+        --text-main: #0f172a;
+        --text-sub:  #475569;
+    }
+
+    * { box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
+
+    /* ── Page Header ── */
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -14,16 +34,17 @@
         gap: 12px;
     }
     .page-title {
-        font-size: 20px;
-        font-weight: 600;
-        color: #111827;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
         letter-spacing: -0.3px;
         margin: 0;
     }
     .page-subtitle {
-        font-size: 13px;
-        color: #6b7280;
-        margin-top: 2px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-sub);
+        margin-top: 3px;
     }
     .btn-row {
         display: flex;
@@ -32,69 +53,81 @@
         flex-wrap: wrap;
     }
 
+    /* ── Buttons ── */
     .btn-solid {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: #111827;
+        background: var(--rs-green);
         color: #fff;
         border: none;
         border-radius: 8px;
         padding: 8px 14px;
-        font-size: 13px;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: 700;
         cursor: pointer;
         text-decoration: none;
-        transition: opacity .15s;
+        transition: background .15s;
+        box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
     }
-    .btn-solid:hover { opacity: .85; color: #fff; }
+    .btn-solid:hover { background: var(--rs-green-hover); color: #fff; text-decoration: none; }
 
+    /* Fix tombol riwayat agar tidak ada garis bawah */
     .btn-outline-sm {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: transparent;
-        color: #6b7280;
-        border: 0.5px solid #d1d5db;
+        background: #fff;
+        color: var(--text-main);
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 8px 14px;
-        font-size: 13px;
+        font-size: 12px;
+        font-weight: 600;
         cursor: pointer;
-        text-decoration: none;
-        transition: background .15s;
+        text-decoration: none !important; /* Menghilangkan garis bawah */
+        transition: all .15s;
     }
-    .btn-outline-sm:hover { background: #f9fafb; color: #374151; }
+    .btn-outline-sm:hover {
+        background: var(--slate);
+        color: var(--rs-purple);
+        border-color: var(--rs-purple-mid);
+        text-decoration: none !important;
+    }
 
     .btn-danger-sm {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: transparent;
+        background: #fff;
         color: #dc2626;
-        border: 0.5px solid #fca5a5;
+        border: 1px solid #fca5a5;
         border-radius: 8px;
         padding: 8px 14px;
-        font-size: 13px;
+        font-size: 12px;
+        font-weight: 600;
         cursor: pointer;
+        text-decoration: none !important;
         transition: background .15s;
     }
-    .btn-danger-sm:hover { background: #fee2e2; }
+    .btn-danger-sm:hover { background: #fef2f2; text-decoration: none !important; }
 
     .sel-badge {
-        background: #fee2e2;
-        color: #b91c1c;
+        background: #fef2f2;
+        color: #dc2626;
         border-radius: 20px;
-        padding: 1px 7px;
+        padding: 2px 6px;
         font-size: 11px;
-        font-weight: 500;
+        font-weight: 700;
+        border: 1px solid #fecaca;
     }
 
     /* ── Filter Tanggal Toolbar ── */
     .toolbar-card {
         background: #fff;
-        border: 0.5px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 14px 20px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 16px;
         margin-bottom: 14px;
     }
     .toolbar-row {
@@ -105,103 +138,85 @@
     }
     .toolbar-label {
         font-size: 11px;
-        font-weight: 600;
-        color: #9ca3af;
+        font-weight: 700;
+        color: var(--text-main);
         text-transform: uppercase;
         letter-spacing: .5px;
         white-space: nowrap;
     }
     .date-input {
-        padding: 7px 10px;
-        border: 0.5px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 13px;
-        color: #111827;
-        background: #fff;
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-main);
+        background: var(--slate);
         outline: none;
-        transition: border-color .15s, box-shadow .15s;
+        font-family: 'DM Sans', sans-serif;
+        transition: border-color .15s;
     }
-    .date-input:focus {
-        border-color: #6b7280;
-        box-shadow: 0 0 0 3px rgba(0,0,0,.06);
-    }
-    .date-sep { font-size: 12px; color: #9ca3af; }
-    .divider-v { width: 1px; height: 28px; background: #e5e7eb; }
+    .date-input:focus { border-color: var(--rs-purple); background: #fff; }
+    .date-sep { font-size: 12px; font-weight: 600; color: var(--text-sub); }
+    .divider-v { width: 1px; height: 24px; background: var(--border); }
 
     .quick-pills { display: flex; gap: 6px; flex-wrap: wrap; }
     .quick-pill {
         padding: 5px 12px;
         border-radius: 20px;
-        font-size: 12px;
-        border: 0.5px solid #e5e7eb;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid var(--border);
         background: transparent;
-        color: #6b7280;
+        color: var(--text-sub);
         cursor: pointer;
         transition: all .15s;
     }
-    .quick-pill:hover, .quick-pill.active {
-        background: #111827;
-        color: #fff;
-        border-color: #111827;
-    }
+    .quick-pill:hover { background: var(--rs-purple-soft); color: var(--rs-purple); border-color: var(--rs-purple-mid); }
+    .quick-pill.active { background: var(--rs-purple); color: #fff; border-color: var(--rs-purple); }
+
     .btn-reset {
         margin-left: auto;
         padding: 6px 12px;
-        font-size: 12px;
-        border: 0.5px solid #e5e7eb;
-        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid var(--border);
+        border-radius: 6px;
         background: transparent;
-        color: #6b7280;
+        color: var(--text-main);
         cursor: pointer;
         transition: background .15s;
     }
-    .btn-reset:hover { background: #f9fafb; }
+    .btn-reset:hover { background: var(--slate); }
 
-    /* ── Filter Kategori Chips ── */
-    .filter-row {
+    /* ── Filter Kategori Dropdown ── */
+    .filter-dropdown-wrap {
         display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
         align-items: center;
-        margin-bottom: 14px;
+        gap: 12px;
+        margin-bottom: 16px;
     }
-    .filter-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 14px;
-        border-radius: 20px;
+    .select-kategori {
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
         font-size: 12px;
-        font-weight: 500;
-        border: 0.5px solid #e5e7eb;
-        background: transparent;
-        color: #6b7280;
+        font-weight: 600;
+        color: var(--text-main);
+        background: #fff;
+        outline: none;
+        font-family: 'DM Sans', sans-serif;
+        min-width: 220px;
         cursor: pointer;
-        transition: all .15s;
-        text-decoration: none;
     }
-    .filter-chip:hover { background: #f3f4f6; }
-    .filter-chip.active {
-        background: #111827;
-        color: #fff;
-        border-color: #111827;
-    }
-    .chip-count {
-        font-size: 10px;
-        padding: 1px 6px;
-        border-radius: 20px;
-        background: rgba(255,255,255,.22);
-    }
-    .filter-chip:not(.active) .chip-count {
-        background: #f3f4f6;
-        color: #6b7280;
-    }
+    .select-kategori:focus { border-color: var(--rs-purple); }
 
-    /* ── Result info ── */
+    /* ── Result Info ── */
     .result-info {
         font-size: 12px;
-        color: #9ca3af;
-        margin-bottom: 14px;
+        font-weight: 600;
+        color: var(--text-sub);
+        margin-bottom: 12px;
     }
 
     /* ── Maintenance Cards ── */
@@ -216,150 +231,105 @@
 
     .maintenance-card {
         background: #fff;
-        border: 0.5px solid #e5e7eb;
-        border-radius: 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
         padding: 16px;
         position: relative;
         display: flex;
         flex-direction: column;
-        transition: border-color .15s;
+        transition: border-color .15s, box-shadow .15s;
         cursor: pointer;
     }
-    .maintenance-card:hover { border-color: #d1d5db; }
-    .maintenance-card.selected {
-        border-color: #1d4ed8;
-        box-shadow: 0 0 0 2px rgba(29,78,216,.12);
-    }
+    .maintenance-card:hover { border-color: var(--rs-purple-mid); box-shadow: 0 4px 10px rgba(107, 33, 168, 0.05); }
+    .maintenance-card.selected { border-color: var(--rs-purple); background-color: #faf5ff; box-shadow: 0 0 0 2px rgba(107, 33, 168, 0.15); }
 
-    .card-checkbox {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        accent-color: #1d4ed8;
-        z-index: 10;
-    }
+    .card-checkbox { position: absolute; top: 14px; right: 14px; width: 16px; height: 16px; cursor: pointer; accent-color: var(--rs-purple); z-index: 10; }
 
-    .mcard-room {
-        font-size: 14px;
-        font-weight: 600;
-        color: #111827;
-        margin-bottom: 10px;
-        padding-right: 26px;
-    }
-    .mcard-date-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        background: #dbeafe;
-        color: #1d4ed8;
-        border-radius: 6px;
-        padding: 3px 9px;
-        font-size: 11px;
-        font-weight: 500;
-        margin-bottom: 8px;
-    }
-    .mcard-meta {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 12px;
-        color: #6b7280;
-        margin-bottom: 6px;
-    }
-    .mcard-desc {
-        font-size: 12px;
-        color: #9ca3af;
-        line-height: 1.5;
-        margin-bottom: 12px;
-        flex: 1;
-    }
-    .btn-detail-card {
-        width: 100%;
-        padding: 7px;
-        border: 0.5px solid #e5e7eb;
-        border-radius: 8px;
-        background: transparent;
-        font-size: 12px;
-        color: #6b7280;
-        cursor: pointer;
-        transition: background .15s, color .15s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-    }
-    .btn-detail-card:hover { background: #f9fafb; color: #111827; }
+    .mcard-room { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; padding-right: 24px; }
+    .mcard-date-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--rs-purple-soft); color: var(--rs-purple); border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: 700; margin-bottom: 10px; border: 1px solid var(--rs-purple-mid); }
+    .mcard-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+    .mcard-desc { font-size: 12px; color: var(--text-sub); font-weight: 500; line-height: 1.5; margin-bottom: 14px; flex: 1; }
+    .btn-detail-card { width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--slate); font-size: 12px; font-weight: 700; color: var(--text-main); cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-detail-card:hover { background: var(--rs-purple-soft); color: var(--rs-purple); border-color: var(--rs-purple); }
 
-    .empty-state {
-        text-align: center;
-        padding: 48px 20px;
-        color: #9ca3af;
-        font-size: 13px;
-        display: none;
-        grid-column: 1 / -1;
-    }
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-sub); font-size: 13px; font-weight: 600; display: none; grid-column: 1 / -1; }
 
     /* ── Modals ── */
-    .modal-content { border-radius: 12px; border: 0.5px solid #e5e7eb; }
-    .modal-header { border-bottom: 0.5px solid #f3f4f6; padding: 18px 24px 14px; }
-    .modal-body   { padding: 20px 24px; }
-    .modal-footer { border-top: 0.5px solid #f3f4f6; padding: 14px 24px; }
-    .modal-title  { font-size: 15px; font-weight: 600; color: #111827; }
+    .modal-content { border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+    .modal-body    { padding: 20px 24px; }
+    .modal-footer  { border-top: 1px solid var(--slate); padding: 14px 24px; background: #fff; }
 
+    .mhead { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 14px; border-bottom: 1px solid var(--slate); }
+    .mhead.purple { background: var(--rs-purple); border-bottom: none; }
+    .mhead .modal-title { font-size: 15px; font-weight: 700; margin: 0; }
+    .mhead.purple .modal-title, .mhead.purple .close { color: #fff; }
+    .mhead.purple .close { opacity: .85; text-shadow: none; font-size: 20px; }
+    .mhead.purple .close:hover { opacity: 1; }
+
+    .btn-tutup-detail { padding: 8px 20px; font-size: 12px; font-weight: 700; border: none; border-radius: 6px; background: #475569; color: #fff; cursor: pointer; transition: background .15s; }
+    .btn-tutup-detail:hover { background: #334155; }
+
+    .detail-list { display: flex; flex-direction: column; gap: 10px; }
+    .detail-item { padding: 12px 14px; background: var(--slate); border-radius: 8px; border: 1px solid var(--border); }
+    .detail-label { font-size: 10px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+    .detail-value { font-size: 13px; font-weight: 700; color: var(--text-main); }
+    .detail-value-desc { font-size: 12px; font-weight: 500; color: var(--text-main); line-height: 1.5; margin-top: 6px; background: #fff; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); }
+
+    /* ── Form CSS Tambahan dari Kode 2 ── */
     .form-label-sm {
         display: block;
         font-size: 11px;
-        font-weight: 600;
-        color: #6b7280;
+        font-weight: 700;
+        color: var(--text-sub);
         margin-bottom: 6px;
         text-transform: uppercase;
-        letter-spacing: .4px;
+        letter-spacing: .5px;
     }
     .form-control-sm-custom {
         width: 100%;
         padding: 8px 11px;
-        border: 0.5px solid #d1d5db;
+        border: 1px solid var(--border);
         border-radius: 8px;
         font-size: 13px;
-        color: #111827;
-        background: #fff;
+        color: var(--text-main);
+        background: var(--slate);
         outline: none;
         transition: border-color .15s;
     }
     .form-control-sm-custom:focus {
-        border-color: #6b7280;
-        box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+        border-color: var(--rs-purple);
+        box-shadow: 0 0 0 3px rgba(107, 33, 168, 0.1);
     }
-
     .btn-modal-cancel {
         padding: 8px 16px;
         font-size: 13px;
-        border: 0.5px solid #d1d5db;
+        border: 1px solid var(--border);
         border-radius: 8px;
         background: transparent;
-        color: #6b7280;
+        color: var(--text-sub);
+        font-weight: 600;
         cursor: pointer;
+        transition: background .15s;
     }
+    .btn-modal-cancel:hover { background: var(--slate); }
     .btn-modal-save {
         padding: 8px 20px;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 700;
         border: none;
         border-radius: 8px;
-        background: #111827;
+        background: var(--rs-green);
         color: #fff;
         cursor: pointer;
-        transition: opacity .15s;
+        transition: background .15s;
+        box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
     }
-    .btn-modal-save:hover { opacity: .85; }
+    .btn-modal-save:hover { background: var(--rs-green-hover); }
 </style>
 
 @if(session('success'))
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ session('success') }}
+<div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius:10px; font-size:13px; background:var(--rs-green-soft); color:var(--rs-green-hover); border:1px solid #bbf7d0;">
+    <i class="fas fa-check-circle mr-1"></i> {{ session('success') }}
     <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
 </div>
 @endif
@@ -367,71 +337,61 @@
 <div class="row">
 <div class="col-md-12 mb-3">
 
-    {{-- ── Page Header ── --}}
     <div class="page-header">
         <div>
-            <h1 class="page-title">Jadwal Maintenance</h1>
-            <p class="page-subtitle">Kelola dan pantau jadwal perawatan perangkat IT</p>
+            <h1 class="page-title"><i class="fas fa-calendar-alt mr-2" style="color:var(--rs-purple);"></i>Maintenance</h1>
         </div>
         <div class="btn-row">
             <button class="btn-solid" data-toggle="modal" data-target="#modalMaintenance">
-                <i class="fas fa-plus" style="font-size:12px"></i>
-                Tambah Jadwal
+                <i class="fas fa-plus" style="font-size:11px"></i>
+                Maintenance
             </button>
             <a href="{{ url('maintenance/riwayat_maintenance') }}" class="btn-outline-sm">
-                <i class="fas fa-history" style="font-size:12px"></i>
+                <i class="fas fa-history" style="font-size:11px"></i>
                 Riwayat
             </a>
             <button id="btn-hapus-terpilih" class="btn-danger-sm">
-                <i class="fas fa-trash" style="font-size:12px"></i>
+                <i class="fas fa-trash" style="font-size:11px"></i>
                 Hapus Terpilih
                 <span id="jumlah-dipilih" class="sel-badge" style="display:none">0</span>
             </button>
         </div>
     </div>
 
-    {{-- ── Filter Tanggal ── --}}
     <div class="toolbar-card">
         <div class="toolbar-row">
             <span class="toolbar-label">Filter Tanggal</span>
             <div style="display:flex;align-items:center;gap:8px;">
-                <input type="date" class="date-input" id="filterDateFrom" placeholder="Dari">
+                <input type="date" class="date-input" id="filterDateFrom">
                 <span class="date-sep">—</span>
-                <input type="date" class="date-input" id="filterDateTo" placeholder="Sampai">
+                <input type="date" class="date-input" id="filterDateTo">
             </div>
             <div class="divider-v"></div>
             <div class="quick-pills">
-                <button class="quick-pill" id="pill-today"  onclick="setQuick('today',this)">Hari ini</button>
-                <button class="quick-pill" id="pill-week"   onclick="setQuick('week',this)">Minggu ini</button>
-                <button class="quick-pill" id="pill-month"  onclick="setQuick('month',this)">Bulan ini</button>
+                <button class="quick-pill" id="pill-today" onclick="setQuick('today',this)">Hari ini</button>
+                <button class="quick-pill" id="pill-week" onclick="setQuick('week',this)">Minggu ini</button>
+                <button class="quick-pill" id="pill-month" onclick="setQuick('month',this)">Bulan ini</button>
                 <button class="quick-pill active" id="pill-all" onclick="setQuick('all',this)">Semua</button>
             </div>
             <button class="btn-reset" onclick="resetDateFilter()">Reset</button>
         </div>
     </div>
 
-    {{-- ── Filter Kategori ── --}}
-    <div class="filter-row" id="filterKategori">
-        <a class="filter-chip active" href="#" data-kategori="all">
-            <i class="fas fa-th-large" style="font-size:11px"></i>
-            Semua
-            <span class="chip-count">{{ $maintenances->count() }}</span>
-        </a>
-        @foreach($kategoriPerangkat as $namaKategori => $items)
-            @php $kat = $items->first(); @endphp
-            <a class="filter-chip" href="#" data-kategori="{{ $kat->id_kategori }}">
-                {{ $namaKategori }}
-                <span class="chip-count">{{ $maintenances->where('id_kategori', $kat->id_kategori)->count() }}</span>
-            </a>
-        @endforeach
+    <div class="filter-dropdown-wrap">
+        <span class="toolbar-label">Kategori Perangkat:</span>
+        <select id="filterKategoriDropdown" class="select-kategori">
+            <option value="all">Semua Kategori</option>
+            @foreach($kategoriPerangkat as $namaKategori => $items)
+                @php $kat = $items->first(); @endphp
+                <option value="{{ $kat->id_kategori }}">{{ $namaKategori }}</option>
+            @endforeach
+        </select>
     </div>
 
-    {{-- ── Result info ── --}}
     <div class="result-info" id="resultInfo">
-        Menampilkan {{ $maintenances->unique('id_ruangan')->count() }} jadwal
+        Menampilkan {{ $maintenances->unique('id_ruangan')->count() }} ruangan termaintenance
     </div>
 
-    {{-- ── Cards Grid ── --}}
     <div class="cards-grid" id="containerMaintenance">
         @php $tampilRuangan = []; @endphp
         @foreach($maintenances as $item)
@@ -439,57 +399,28 @@
                 if(in_array($item->id_ruangan, $tampilRuangan)) continue;
                 $tampilRuangan[] = $item->id_ruangan;
             @endphp
-            <div class="maintenance-card"
-                data-kategori="{{ $item->id_kategori }}"
-                data-ruangan="{{ $item->id_ruangan }}"
-                data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}">
-
-                <input type="checkbox" class="card-checkbox maintenance-check" data-id="{{ $item->id_maintenance }}" title="Pilih untuk dihapus">
-
+            <div class="maintenance-card" data-kategori="{{ $item->id_kategori }}" data-ruangan="{{ $item->id_ruangan }}" data-tanggal="{{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}">
+                <input type="checkbox" class="card-checkbox maintenance-check" data-id="{{ $item->id_ruangan }}">
                 <div class="mcard-room">{{ $item->nama_ruangan }}</div>
-
-                <div class="mcard-date-badge">
-                    <i class="far fa-calendar-alt" style="font-size:10px"></i>
-                    {{ \Carbon\Carbon::parse($item->tanggal)->format('Y-m-d') }}
-                </div>
-
-                <div class="mcard-meta">
-                    <i class="fas fa-user" style="font-size:11px;opacity:.6"></i>
-                    {{ $item->nama_teknisi ?? '-' }}
-                </div>
-
-                <div class="mcard-desc">{{ Str::limit($item->deskripsi, 60) }}</div>
-
-                <button class="btn-detail-card btn-detail"
-                    data-id="{{ $item->id_maintenance }}"
-                    data-toggle="modal"
-                    data-target="#modalDetail">
-                    <i class="fas fa-eye" style="font-size:11px"></i>
-                    Detail
-                </button>
+                <div class="mcard-date-badge"><i class="far fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</div>
+                <div class="mcard-meta"><i class="fas fa-user-circle"></i> {{ $item->nama_teknisi ?? '-' }}</div>
+                <div class="mcard-desc">{{ Str::limit($item->deskripsi, 80) }}</div>
+                <button class="btn-detail-card btn-detail" data-id="{{ $item->id_maintenance }}" data-toggle="modal" data-target="#modalDetail"><i class="fas fa-eye"></i> Detail</button>
             </div>
         @endforeach
-
-        <div class="empty-state" id="pesanKosong">
-            Tidak ada jadwal maintenance untuk filter yang dipilih.
-        </div>
-
-        @if($maintenances->isEmpty())
-        <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:#9ca3af;font-size:13px;">
-            Tidak ada jadwal maintenance.
-        </div>
-        @endif
+        <div class="empty-state" id="pesanKosong"><i class="fas fa-inbox mb-2"></i><br>Tidak ada jadwal.</div>
     </div>
-
 </div>
 </div>
 
-{{-- ── Modal Tambah Maintenance ── --}}
-<div class="modal fade" id="modalMaintenance">
+{{-- MODAL TAMBAH MAINTENANCE --}}
+<div class="modal fade" id="modalMaintenance" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tambah Jadwal Maintenance</h5>
+            <div class="mhead purple">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle mr-2" style="font-size:13px"></i>Pilih Aset Yang di Maintenance
+                </h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <form action="{{ url('maintenance/maintenance') }}" method="POST">
@@ -498,58 +429,90 @@
                     <div id="alertError" class="alert alert-danger d-none"></div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label class="form-label-sm">Kategori Perangkat <span style="font-weight:400;text-transform:none;font-size:11px;color:#9ca3af">(bisa pilih lebih dari satu)</span></label>
+                            <label class="form-label-sm">
+                                Kategori Perangkat
+                                <span style="font-weight:400;text-transform:none;font-size:11px;color:#9ca3af">(bisa pilih lebih dari satu)</span>
+                            </label>
                             <input type="text" id="searchPerangkat" class="form-control-sm-custom mb-2" placeholder="Cari nama kategori...">
-                            <div id="listPerangkat" style="max-height:200px;overflow-y:auto;border:0.5px solid #e5e7eb;border-radius:8px;padding:10px;">
+                            <div id="listPerangkat" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;background:var(--slate);">
                                 @foreach($kategoriPerangkat as $namaKategori => $items)
                                 <div class="kategori-group mb-1" data-nama="{{ strtolower($namaKategori) }}">
                                     @foreach($items as $kat)
                                     <div class="form-check perangkat-item" style="margin-bottom:4px;">
-                                        <input class="form-check-input" type="checkbox" name="id_kategori[]" value="{{ $kat->id_kategori }}" id="kat_{{ $kat->id_kategori }}">
-                                        <label class="form-check-label" for="kat_{{ $kat->id_kategori }}" style="font-size:13px;">{{ $namaKategori }}</label>
+                                        <input class="form-check-input" type="checkbox" name="id_kategori[]" value="{{ $kat->id_kategori }}" id="kat_{{ $kat->id_kategori }}" style="accent-color:var(--rs-purple)">
+                                        <label class="form-check-label" for="kat_{{ $kat->id_kategori }}" style="font-size:13px;color:var(--text-main); font-weight:600;">{{ $namaKategori }}</label>
                                     </div>
                                     @endforeach
                                 </div>
                                 @endforeach
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mt-1">
-                                <small style="color:#1d4ed8;font-size:11px;" id="countPilihan">0 kategori dipilih</small>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <small style="color:var(--rs-purple);font-size:11px;font-weight:700;" id="countPilihan">0 kategori dipilih</small>
                                 <small>
-                                    <a href="#" id="pilihSemua" style="color:#1d4ed8;font-size:11px;">Pilih Semua</a> |
-                                    <a href="#" id="hapusSemua" style="color:#dc2626;font-size:11px;">Hapus Semua</a>
+                                    <a href="#" id="pilihSemua" style="color:var(--rs-purple);font-size:11px;font-weight:700;">Pilih Semua</a>
+                                    <span style="color:var(--border);margin:0 4px">|</span>
+                                    <a href="#" id="hapusSemua" style="color:#ef4444;font-size:11px;font-weight:700;">Hapus Semua</a>
                                 </small>
                             </div>
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label class="form-label-sm">Ruangan</label>
-                            <select name="id_ruangan" class="form-control-sm-custom">
-                                <option value="">Pilih Ruangan...</option>
-                                @foreach($ruangan as $ruang)
-                                    <option value="{{ $ruang->id_ruangan }}">{{ $ruang->nama_ruangan }} || {{ $ruang->lokasi }}</option>
-                                @endforeach
-                            </select>
+                            <div class="col-md-12 form-group">
+                                <label class="form-label-sm">Ruangan</label>
+                                {{-- <label class="form-label-sm">
+                                    Pilih Ruangan
+                                    <span style="font-weight:400;text-transform:none;font-size:11px;color:#ef4444">(Pilih maksimal 1 ruangan)</span>
+                                </label> --}}
+                                <!-- Search Ruangan -->
+                                <input type="text" id="searchRuanganModal" class="form-control-sm-custom mb-2" placeholder="Cari nama ruangan...">
+
+                                <!-- List Ruangan -->
+                                <div id="listRuanganModal" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;background:var(--slate);">
+                                    @foreach($ruangan as $ruang)
+                                    <div class="form-check ruangan-item-modal mb-1" data-nama="{{ strtolower($ruang->nama_ruangan) }}">
+                                        <!-- name diubah kembali menjadi id_ruangan (bukan array) karena hanya satu -->
+                                        <input class="form-check-input check-ruangan" type="checkbox" name="id_ruangan" value="{{ $ruang->id_ruangan }}" id="ruang_{{ $ruang->id_ruangan }}" style="accent-color:var(--rs-purple)">
+                                        <label class="form-check-label" for="ruang_{{ $ruang->id_ruangan }}" style="font-size:13px;color:var(--text-main); font-weight:600; cursor:pointer;">
+                                            {{ $ruang->nama_ruangan }}
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                {{-- <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <small style="color:var(--rs-purple);font-size:11px;font-weight:700;" id="countPilihanRuangan">Belum ada ruangan dipilih</small>
+                                    <!-- Tombol Pilih Semua Dihapus karena hanya boleh pilih satu -->
+                                    <small>
+                                        <a href="#" id="hapusSemuaRuangan" style="color:#ef4444;font-size:11px;font-weight:700;">Reset Pilihan</a>
+                                    </small>
+                                </div> --}}
+                            </div>
                         </div>
+
                         <div class="col-md-6 form-group">
                             <label class="form-label-sm">Tanggal</label>
                             <input type="date" name="tanggal" id="inputTanggal" class="form-control-sm-custom">
                         </div>
+
                         <div class="col-md-6 form-group">
                             <label class="form-label-sm">Jam</label>
                             <input type="time" name="jam" id="inputJam" class="form-control-sm-custom">
                         </div>
+
                         <div class="col-md-6 form-group">
                             <label class="form-label-sm">Nama Teknisi</label>
                             @if(Auth::user()->role == "teknisi")
-                                <input type="text" name="nama_teknisi" value="{{ Auth::user()->name }}" class="form-control-sm-custom" readonly>
+                                <input type="text" name="nama_teknisi" value="{{ Auth::user()->name }}" class="form-control-sm-custom" readonly style="background:#f1f5f9;color:#64748b;">
                             @else
                                 <input type="text" name="nama_teknisi" value="{{ Auth::user()->name }}" class="form-control-sm-custom">
                             @endif
                         </div>
+
                         <div class="col-md-12 form-group">
                             <label class="form-label-sm">Deskripsi</label>
                             <textarea name="deskripsi" class="form-control-sm-custom" rows="3" placeholder="Deskripsi pekerjaan maintenance..."></textarea>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end" style="gap:8px">
@@ -561,297 +524,232 @@
     </div>
 </div>
 
-{{-- ── Modal Detail ── --}}
+{{-- Modal Detail --}}
 <div class="modal fade" id="modalDetail" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Jadwal Maintenance</h5>
+            <div class="mhead purple">
+                <h5 class="modal-title">Informasi Maintenance</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">
                 <div id="detail-loading" class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>
-                    <p class="mt-2" style="color:#9ca3af;font-size:13px;">Memuat data...</p>
+                    <div class="spinner-border" style="color:var(--rs-purple); width:24px;height:24px;" role="status"></div>
                 </div>
                 <div id="detail-content" style="display:none;">
-                    <table class="table table-borderless mb-0" style="font-size:13px;">
-                        <tbody>
-                            <tr>
-                                <th width="38%" style="color:#9ca3af;font-weight:500;">Ruangan</th>
-                                <td>: <span id="d-ruangan">-</span></td>
-                            </tr>
-                            <tr>
-                                <th style="color:#9ca3af;font-weight:500;">Perangkat</th>
-                                <td>: <span id="d-kategori">-</span></td>
-                            </tr>
-                            <tr>
-                                <th style="color:#9ca3af;font-weight:500;">Tanggal</th>
-                                <td>: <span id="d-tanggal">-</span></td>
-                            </tr>
-                            <tr>
-                                <th style="color:#9ca3af;font-weight:500;">Teknisi</th>
-                                <td>: <span id="d-teknisi">-</span></td>
-                            </tr>
-                            <tr>
-                                <th style="color:#9ca3af;font-weight:500;">Deskripsi</th>
-                                <td>: <span id="d-deskripsi">-</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="detail-error" class="alert alert-danger d-none">
-                    Gagal memuat data. Silakan coba lagi.
+                    <div class="detail-list">
+                        <div class="detail-item"><div class="detail-label">Ruangan</div><div class="detail-value" id="d-ruangan">-</div></div>
+                        <div class="detail-item"><div class="detail-label">Tanggal</div><div class="detail-value" id="d-tanggal">-</div></div>
+                        <div class="detail-item"><div class="detail-label">Teknisi</div><div class="detail-value" id="d-teknisi">-</div></div>
+                        <div class="detail-item"><div class="detail-label">Kategori</div><div class="detail-value" id="d-kategori" style="margin-top:6px;">-</div></div>
+                        <div class="detail-item" style="background:transparent; border:none; padding:0;"><div class="detail-label">Deskripsi</div><div class="detail-value-desc" id="d-deskripsi">-</div></div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button type="button" class="btn-modal-cancel" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn-tutup-detail" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-/* ─────────────────────────────────────────
-   FILTER TANGGAL
-───────────────────────────────────────── */
-function fmtDate(d) {
-    return d.getFullYear() + '-' +
-        String(d.getMonth() + 1).padStart(2, '0') + '-' +
-        String(d.getDate()).padStart(2, '0');
-}
-
-function setQuick(type, el) {
-    document.querySelectorAll('.quick-pill').forEach(function(p) { p.classList.remove('active'); });
-    el.classList.add('active');
-    var now = new Date();
-    var from, to;
-    if (type === 'today') {
-        from = to = fmtDate(now);
-    } else if (type === 'week') {
-        var d = new Date(now);
-        d.setDate(d.getDate() - d.getDay());
-        from = fmtDate(d);
-        var d2 = new Date(d); d2.setDate(d2.getDate() + 6);
-        to = fmtDate(d2);
-    } else if (type === 'month') {
-        from = fmtDate(new Date(now.getFullYear(), now.getMonth(), 1));
-        to   = fmtDate(new Date(now.getFullYear(), now.getMonth() + 1, 0));
-    } else {
-        from = ''; to = '';
+    function fmtDate(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function setQuick(type, el) {
+        $('.quick-pill').removeClass('active'); $(el).addClass('active');
+        var now = new Date(); var from, to;
+        if (type==='today') { from = to = fmtDate(now); }
+        else if (type==='week') { var d = new Date(now); d.setDate(d.getDate() - d.getDay()); from = fmtDate(d); var d2 = new Date(d); d2.setDate(d2.getDate() + 6); to = fmtDate(d2); }
+        else if (type==='month') { from = fmtDate(new Date(now.getFullYear(), now.getMonth(), 1)); to = fmtDate(new Date(now.getFullYear(), now.getMonth() + 1, 0)); }
+        else { from = ''; to = ''; }
+        $('#filterDateFrom').val(from); $('#filterDateTo').val(to); applyAllFilters();
     }
-    $('#filterDateFrom').val(from);
-    $('#filterDateTo').val(to);
-    applyAllFilters();
-}
+    function resetDateFilter() { $('#filterDateFrom').val(''); $('#filterDateTo').val(''); $('.quick-pill').removeClass('active'); $('#pill-all').addClass('active'); applyAllFilters(); }
+    $('#filterDateFrom, #filterDateTo').on('change', function () { $('.quick-pill').removeClass('active'); applyAllFilters(); });
+    $('#filterKategoriDropdown').on('change', applyAllFilters);
 
-function resetDateFilter() {
-    $('#filterDateFrom').val('');
-    $('#filterDateTo').val('');
-    document.querySelectorAll('.quick-pill').forEach(function(p) { p.classList.remove('active'); });
-    document.getElementById('pill-all').classList.add('active');
-    applyAllFilters();
-}
+    var mappingKategori = {};
+    $.ajax({ url: "{{ url('maintenance/kategori-ruangan') }}", method: 'GET', success: function (data) { mappingKategori = data; } });
 
-$('#filterDateFrom, #filterDateTo').on('change', function () {
-    document.querySelectorAll('.quick-pill').forEach(function(p) { p.classList.remove('active'); });
-    applyAllFilters();
-});
+    function applyAllFilters() {
+        var kategori = $('#filterKategoriDropdown').val();
+        var dateFrom = $('#filterDateFrom').val();
+        var dateTo = $('#filterDateTo').val();
 
-/* ─────────────────────────────────────────
-   FILTER KATEGORI (original algo intact)
-───────────────────────────────────────── */
-var mappingKategori = {};
+        var uniqueRooms = new Set();
+        var visibleCards = 0;
 
-$.ajax({
-    url: "{{ url('maintenance/kategori-ruangan') }}",
-    method: 'GET',
-    success: function (data) { mappingKategori = data; }
-});
+        $('.maintenance-card').each(function () {
+            var cardKat = parseInt($(this).data('kategori'));
+            var cardRuang = parseInt($(this).data('ruangan'));
+            var cardDate = $(this).data('tanggal');
 
-$(document).on('click', '#filterKategori .filter-chip', function (e) {
-    e.preventDefault();
-    $('#filterKategori .filter-chip').removeClass('active');
-    $(this).addClass('active');
-    applyAllFilters();
-});
+            var katOk = (kategori === 'all') ? true : (mappingKategori[cardRuang] ? mappingKategori[cardRuang].includes(parseInt(kategori)) && mappingKategori[cardRuang].includes(cardKat) : cardKat === parseInt(kategori));
 
-/* ─────────────────────────────────────────
-   COMBINED FILTER (kategori + tanggal)
-───────────────────────────────────────── */
-function applyAllFilters() {
-    var kategori = $('#filterKategori .filter-chip.active').data('kategori');
-    var dateFrom = $('#filterDateFrom').val();
-    var dateTo   = $('#filterDateTo').val();
-    var visible  = 0;
+            var dateOk = true;
+            if (dateFrom) dateOk = dateOk && (cardDate >= dateFrom);
+            if (dateTo) dateOk = dateOk && (cardDate <= dateTo);
 
-    $('.maintenance-card').each(function () {
-        var cardKategori = parseInt($(this).data('kategori'));
-        var cardRuangan  = parseInt($(this).data('ruangan'));
-        var cardDate     = $(this).data('tanggal');
-
-        // kategori filter (original logic)
-        var katOk = false;
-        if (kategori === 'all') {
-            katOk = true;
-        } else {
-            var allowedKategoris = mappingKategori[cardRuangan] || null;
-            if (allowedKategoris) {
-                katOk = allowedKategoris.includes(parseInt(kategori))
-                     && allowedKategoris.includes(cardKategori);
+            if (katOk && dateOk) {
+                $(this).show();
+                uniqueRooms.add(cardRuang);
+                visibleCards++;
             } else {
-                katOk = (cardKategori === parseInt(kategori));
+                $(this).hide();
             }
-        }
+        });
 
-        // date filter
-        var dateOk = true;
-        if (dateFrom) dateOk = dateOk && (cardDate >= dateFrom);
-        if (dateTo)   dateOk = dateOk && (cardDate <= dateTo);
+        // Update teks info dengan jumlah ruangan unik
+        $('#resultInfo').html('Menampilkan ' + uniqueRooms.size + ' ruangan termaintenance');
 
-        if (katOk && dateOk) {
-            $(this).show();
-            visible++;
+        // Tampilkan pesan kosong jika tidak ada kartu sama sekali
+        $('#pesanKosong').toggle(visibleCards === 0);
+    }
+
+    $(document).on('click', '.btn-detail', function () {
+        var id = $(this).data('id');
+        $('#detail-loading').show(); $('#detail-content').hide();
+        $.ajax({
+            url: "{{ url('maintenance/detail') }}/" + id, method: 'GET',
+            success: function (data) {
+                $('#d-ruangan').text(data.nama_ruangan); $('#d-tanggal').text(data.tanggal); $('#d-teknisi').text(data.nama_teknisi); $('#d-deskripsi').text(data.deskripsi || 'Tidak ada catatan.');
+                var katHtml = ''; if (data.kategoris) { $.each(data.kategoris, function (i, k) { katHtml += '<span style="display:inline-block;background:var(--rs-purple);color:#fff;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;margin:0 4px 4px 0;">'+k.nama_kategori+'</span>'; }); }
+                $('#d-kategori').html(katHtml || '-'); $('#detail-loading').hide(); $('#detail-content').show();
+            }
+        });
+    });
+
+    // CHECKBOX & HAPUS TERPILIH
+    function updateJumlahDipilih() {
+        var count = $('.maintenance-check:checked').length;
+        if (count > 0) {
+            $('#jumlah-dipilih').text(count).show();
         } else {
-            $(this).hide();
+            $('#jumlah-dipilih').hide();
         }
-    });
-
-    $('#resultInfo').text('Menampilkan ' + visible + ' jadwal');
-    var adaCard = visible > 0;
-    $('#pesanKosong').css('display', adaCard ? 'none' : 'block');
-}
-
-/* ─────────────────────────────────────────
-   CHECKBOX & HAPUS TERPILIH (original)
-───────────────────────────────────────── */
-$(document).on('change', '.maintenance-check', function () {
-    $(this).closest('.maintenance-card').toggleClass('selected', $(this).is(':checked'));
-    updateJumlahDipilih();
-});
-
-$(document).on('click', '.maintenance-card', function (e) {
-    if ($(e.target).hasClass('btn-detail-card') || $(e.target).closest('.btn-detail-card').length) return;
-    if ($(e.target).hasClass('maintenance-check')) return;
-    var checkbox = $(this).find('.maintenance-check');
-    checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
-});
-
-function updateJumlahDipilih() {
-    var count = $('.maintenance-check:checked').length;
-    if (count > 0) {
-        $('#jumlah-dipilih').text(count).show();
-    } else {
-        $('#jumlah-dipilih').hide();
     }
-}
 
-$('#btn-hapus-terpilih').on('click', function () {
-    var ids = [];
-    $('.maintenance-check:checked').each(function () { ids.push($(this).data('id')); });
-    if (ids.length === 0) { alert('Pilih minimal satu data untuk dihapus.'); return; }
-    if (!confirm('Hapus ' + ids.length + ' jadwal maintenance yang dipilih?')) return;
-
-    $.ajax({
-        url: "{{ url('maintenance/destroy') }}",
-        method: 'POST',
-        data: { _token: '{{ csrf_token() }}', ids: ids },
-        success: function (res) {
-            $('.maintenance-check:checked').each(function () {
-                $(this).closest('.maintenance-card').fadeOut(300, function () { $(this).remove(); applyAllFilters(); });
-            });
-            updateJumlahDipilih();
-            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + '<i class="fas fa-check-circle mr-1"></i> ' + res.count + ' data berhasil dihapus.'
-                + '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
-            $('.col-md-12').prepend(alertHtml);
-        },
-        error: function () { alert('Gagal menghapus data. Silakan coba lagi.'); }
+    $(document).on('change', '.maintenance-check', function () {
+        $(this).closest('.maintenance-card').toggleClass('selected', $(this).is(':checked'));
+        updateJumlahDipilih();
     });
-});
 
-/* ─────────────────────────────────────────
-   DETAIL MODAL (original)
-───────────────────────────────────────── */
-$(document).on('click', '.btn-detail', function () {
-    var id = $(this).data('id');
-    $('#detail-loading').show();
-    $('#detail-content').hide();
-    $('#detail-error').addClass('d-none');
+    $(document).on('click', '.maintenance-card', function (e) {
+        if ($(e.target).hasClass('btn-detail-card') || $(e.target).closest('.btn-detail-card').length) return;
+        if ($(e.target).hasClass('maintenance-check')) return;
+        var checkbox = $(this).find('.maintenance-check');
+        checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+    });
 
-    $.ajax({
-        url: "{{ url('maintenance/detail') }}/" + id,
-        method: 'GET',
-        success: function (data) {
-            $('#d-ruangan').text(data.nama_ruangan ?? '-');
-            $('#d-tanggal').text(data.tanggal      ?? '-');
-            $('#d-teknisi').text(data.nama_teknisi  ?? '-');
-            $('#d-deskripsi').text(data.deskripsi   ?? '-');
-            var kategoriHtml = '';
-            if (data.kategoris && data.kategoris.length > 0) {
-                $.each(data.kategoris, function (i, kat) {
-                    kategoriHtml += '<span class="badge badge-primary mr-1 mb-1">' + kat.nama_kategori + '</span>';
+    $('#btn-hapus-terpilih').on('click', function () {
+        var ids = [];
+        $('.maintenance-check:checked').each(function () { ids.push($(this).data('id')); });
+        if (ids.length === 0) { alert('Pilih minimal satu data untuk dihapus.'); return; }
+        if (!confirm('Hapus ' + ids.length + ' jadwal maintenance yang dipilih?')) return;
+
+        $.ajax({
+            url: "{{ url('maintenance/destroy') }}",
+            method: 'POST',
+            data: { _token: '{{ csrf_token() }}', ids: ids },
+            success: function (res) {
+                $('.maintenance-check:checked').each(function () {
+                    $(this).closest('.maintenance-card').fadeOut(300, function () {
+                        $(this).remove();
+                        applyAllFilters();
+                    });
                 });
-            } else { kategoriHtml = '-'; }
-            $('#d-kategori').html(kategoriHtml);
-            $('#detail-loading').hide();
-            $('#detail-content').show();
-        },
-        error: function () {
-            $('#detail-loading').hide();
-            $('#detail-error').removeClass('d-none');
+                updateJumlahDipilih();
+                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius:10px;font-size:13px;background:var(--rs-green-soft);color:var(--rs-green-hover);border:1px solid #bbf7d0;">'
+                    + '<i class="fas fa-check-circle mr-1"></i> ' + res.count + ' data berhasil dihapus.'
+                    + '<button type="button" class="close" data-dismiss="alert"><span>&times;</span></button></div>';
+                $('.col-md-12').prepend(alertHtml);
+            },
+            error: function () { alert('Gagal menghapus data. Silakan coba lagi.'); }
+        });
+    });
+
+    // MODAL TAMBAH MAINTENANCE SCRIPT
+    $('#searchPerangkat').on('input', function () {
+        var keyword = $(this).val().toLowerCase().trim();
+        $('.kategori-group').each(function () {
+            var namaKategori = $(this).data('nama') || '';
+            if (keyword === '') { $(this).show(); }
+            else { $(this).toggle(namaKategori.includes(keyword)); }
+        });
+        var tampil = $('.kategori-group:visible').length;
+        if (keyword !== '') {
+            $('#countPilihan').text(tampil + ' hasil ditemukan');
+        } else {
+            $('#countPilihan').text($('input[name="id_kategori[]"]:checked').length + ' kategori dipilih');
         }
     });
-});
 
-/* ─────────────────────────────────────────
-   MODAL TAMBAH — search & checkbox (original)
-───────────────────────────────────────── */
-$('#searchPerangkat').on('input', function () {
-    var keyword = $(this).val().toLowerCase().trim();
-    $('.kategori-group').each(function () {
-        var namaKategori = $(this).data('nama') || '';
-        if (keyword === '') { $(this).show(); }
-        else { $(this).toggle(namaKategori.includes(keyword)); }
-    });
-    var tampil = $('.kategori-group:visible').length;
-    if (keyword !== '') {
-        $('#countPilihan').text(tampil + ' hasil ditemukan');
-    } else {
+    $(document).on('change', 'input[name="id_kategori[]"]', function () {
         $('#countPilihan').text($('input[name="id_kategori[]"]:checked').length + ' kategori dipilih');
-    }
-});
+    });
 
-$(document).on('change', 'input[name="id_kategori[]"]', function () {
-    $('#countPilihan').text($('input[name="id_kategori[]"]:checked').length + ' kategori dipilih');
-});
+    $('#pilihSemua').on('click', function (e) {
+        e.preventDefault();
+        $('input[name="id_kategori[]"]:visible').prop('checked', true);
+        $('#countPilihan').text($('input[name="id_kategori[]"]:checked').length + ' kategori dipilih');
+    });
 
-$('#pilihSemua').on('click', function (e) {
-    e.preventDefault();
-    $('input[name="id_kategori[]"]:visible').prop('checked', true);
-    $('#countPilihan').text($('input[name="id_kategori[]"]:checked').length + ' kategori dipilih');
-});
+    $('#hapusSemua').on('click', function (e) {
+        e.preventDefault();
+        $('input[name="id_kategori[]"]').prop('checked', false);
+        $('#countPilihan').text('0 kategori dipilih');
+    });
 
-$('#hapusSemua').on('click', function (e) {
-    e.preventDefault();
-    $('input[name="id_kategori[]"]').prop('checked', false);
-    $('#countPilihan').text('0 kategori dipilih');
-});
+    $('#modalMaintenance').on('hidden.bs.modal', function () {
+        $('input[name="id_kategori[]"]').prop('checked', false);
+        $('#countPilihan').text('0 kategori dipilih');
+        $('#searchPerangkat').val('');
+        $('.perangkat-item, .kategori-group').show();
+    });
 
-$('#modalMaintenance').on('hidden.bs.modal', function () {
-    $('input[name="id_kategori[]"]').prop('checked', false);
-    $('#countPilihan').text('0 kategori dipilih');
-    $('#searchPerangkat').val('');
-    $('.perangkat-item, .kategori-group').show();
-});
+    $('#modalMaintenance').on('show.bs.modal', function () {
+        var now    = new Date();
+        var tanggal = fmtDate(now);
+        var jam    = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+        $('#inputTanggal').val(tanggal);
+        $('#inputJam').val(jam);
+    });
 
-$('#modalMaintenance').on('show.bs.modal', function () {
-    var now    = new Date();
-    var tanggal = fmtDate(now);
-    var jam    = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-    $('#inputTanggal').val(tanggal);
-    $('#inputJam').val(jam);
-});
+    $(document).on('change', '.check-ruangan', function() {
+        if ($(this).is(':checked')) {
+            // Uncheck semua checkbox ruangan lainnya
+            $('.check-ruangan').not(this).prop('checked', false);
+
+            // Update teks info
+            var namaRuang = $(this).closest('.ruangan-item-modal').find('label').text().trim();
+            $('#countPilihanRuangan').html('<i class="fas fa-check-circle"></i> Terpilih: ' + namaRuang);
+        } else {
+            $('#countPilihanRuangan').text('Belum ada ruangan dipilih');
+        }
+    });
+
+    // Search Ruangan
+    $('#searchRuanganModal').on('input', function () {
+        var keyword = $(this).val().toLowerCase().trim();
+        $('.ruangan-item-modal').each(function () {
+            var nama = $(this).data('nama') || '';
+            $(this).toggle(nama.includes(keyword));
+        });
+    });
+
+    // Reset Pilihan Ruangan
+    $('#hapusSemuaRuangan').on('click', function (e) {
+        e.preventDefault();
+        $('.check-ruangan').prop('checked', false);
+        $('#countPilihanRuangan').text('Belum ada ruangan dipilih');
+    });
+
+    // Reset saat modal ditutup
+    $('#modalMaintenance').on('hidden.bs.modal', function () {
+        $('.check-ruangan').prop('checked', false);
+        $('#countPilihanRuangan').text('Belum ada ruangan dipilih');
+        $('#searchRuanganModal').val('');
+        $('.ruangan-item-modal').show();
+    });
 </script>
-
 @endsection

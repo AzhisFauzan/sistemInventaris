@@ -16,9 +16,14 @@ class UserCtrl extends Controller
     public function store_user(Request $request)
     {
         $request->validate([
-            'name'     => 'required',
-            'password' => 'required',
+            'name'     => ['required', 'regex:/^[A-Z\s]+$/'],
+            'password' => ['required', 'max:10'],
             'role'     => 'required'
+        ], [
+            'name.regex'     => 'Nama/Username harus HURUF BESAR semua.',
+            'password.max'   => 'Password maksimal 10 karakter.',
+            'name.required'  => 'Nama wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
         ]);
 
         $user = User::create([
@@ -29,6 +34,7 @@ class UserCtrl extends Controller
 
         return response()->json([
             'status' => 'success',
+            'id'     => $user->id,
             'name'   => $user->name,
             'role'   => $user->role,
         ]);
@@ -36,9 +42,18 @@ class UserCtrl extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
+        $rules = [
+            'name' => ['required', 'regex:/^[A-Z\s]+$/'],
             'role' => 'required',
+        ];
+
+        if ($request->password != '') {
+            $rules['password'] = 'max:10';
+        }
+
+        $request->validate($rules, [
+            'name.regex'     => 'Nama harus HURUF BESAR semua.',
+            'password.max'   => 'Password baru maksimal harus 10 karakter.',
         ]);
 
         $user = User::findOrFail($id);

@@ -3,51 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        body { font-family: Arial, sans-serif; font-size: 11px; margin: 20px; }
-        .header { text-align: center; margin-bottom: 15px; border-bottom: 2px solid #4E73DF; padding-bottom: 10px; }
-        .header h2 { margin: 0; color: #4E73DF; font-size: 15px; }
-        .header p  { margin: 3px 0; color: #555; font-size: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background-color: #4E73DF; color: white; padding: 7px 8px; font-size: 10px; text-align: left; }
-        td { padding: 5px 8px; border-bottom: 1px solid #ddd; font-size: 10px; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .footer { margin-top: 10px; font-size: 9px; color: #aaa; text-align: right; }
+        /* Pengaturan Kertas A4 Portrait */
+        @page {
+            size: A4 portrait;
+            margin: 1.5cm;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 10px;
+            margin: 0;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #16a34a; /* Hijau Utama */
+            padding-bottom: 10px;
+        }
+        .header h2 {
+            margin: 0;
+            color: #16a34a;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .header p {
+            margin: 4px 0;
+            color: #555;
+            font-size: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            background-color: #16a34a; /* Hijau Utama */
+            color: white;
+            padding: 8px 5px;
+            font-size: 10px;
+            text-align: left;
+            border: 1px solid #16a34a;
+        }
+
+        td {
+            padding: 6px 5px;
+            border: 1px solid #e2e8f0;
+            font-size: 9px;
+            word-wrap: break-word;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) { background-color: #f0fdf4; } /* Hijau sangat muda */
+
+        /* Pengaturan Lebar Kolom */
+        .col-no { width: 20px; text-align: center; } /* Nomor dipersempit */
+        .col-kode { width: 85px; }
+        .col-kat { width: 70px; }
+        .col-ruang { width: 80px; }
+        .col-ip { width: 75px; }
+        .col-spek { width: auto; }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 8px;
+            color: #94a3b8;
+            text-align: right;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 5px;
+        }
+
+        .text-bold { font-weight: bold; }
+        .text-center { text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2>Laporan Inventaris Perangkat IT</h2>
-        <p>Ruangan : <strong>{{ $namaRuangan }}</strong></p>
         <p>Dicetak pada : {{ \Carbon\Carbon::now('Asia/Jakarta')->locale('id')->isoFormat('D MMMM YYYY HH:mm') }} WIB</p>
-        <p>Total : {{ $perangkat->count() }} perangkat</p>
+        <p>Total Perangkat : <span class="text-bold">{{ $perangkat->count() }}</span></p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>No</th>
-                <th>Kode Inventaris</th>
-                <th>Kategori</th>
-                <th>Ruangan</th>
-                <th>Alamat IP</th>
-                <th>Spesifikasi</th>
+                <th class="col-no text-center">No</th>
+                <th class="col-kode">Kode Inventaris</th>
+                <th class="col-kat">Kategori</th>
+                <th class="col-ruang">Ruangan</th>
+                <th class="col-ip">Alamat IP</th>
+                <th class="col-spek">Spesifikasi</th>
             </tr>
         </thead>
         <tbody>
             @forelse($perangkat as $i => $p)
             <tr>
-                <td>{{ $i + 1 }}</td>
+                <td class="text-center">{{ $i + 1 }}</td>
                 <td>{{ $p->kode_inventaris ?? '-' }}</td>
-                <td>{{ $p->nama_kategori   ?? '-' }}</td>
-                <td>{{ $p->nama_ruangan    ?? '-' }}</td>
-                <td>{{ $p->alamat_ip       ?? '-' }}</td>
-                <td>{{ $p->spesifikasi     ?? '-' }}</td>
+                <td>{{ $p->nama_kategori ?? '-' }}</td>
+                <td>{{ $p->nama_ruangan ?? '-' }}</td>
+                <td>{{ $p->alamat_ip ?? '-' }}</td>
+                <td>{{ $p->spesifikasi ?? '-' }}</td>
             </tr>
             @empty
             <tr>
-                <td colspan="6" style="text-align:center; color:#999; padding:15px;">
-                    Tidak ada data perangkat
+                <td colspan="6" class="text-center" style="color:#94a3b8; padding:30px;">
+                    Data perangkat tidak tersedia.
                 </td>
             </tr>
             @endforelse
@@ -55,8 +122,7 @@
     </table>
 
     <div class="footer">
-        Laporan Inventaris IT &nbsp;|&nbsp; {{ now()->format('d/m/Y') }}
+        RS Darmayu Madiun — Sistem Inventaris IT &nbsp;|&nbsp; {{ date('d/m/Y') }}
     </div>
-
 </body>
 </html>
