@@ -13,8 +13,8 @@ Sistem Informasi Inventaris dan Maintenance Aset IT (PC, Laptop, Printer, dll) b
 - **Database:** MySQL
 
 ## Struktur project saat ini
-
-''' sistemInventaris/
+```
+sistemInventaris/
 ├── app/
 │   ├── Http/Controllers/
 │   │   ├── AuthCtrl.php
@@ -58,8 +58,8 @@ Sistem Informasi Inventaris dan Maintenance Aset IT (PC, Laptop, Printer, dll) b
 ├── composer.lock
 ├── Dockerfile
 ├── package.json
-└── phpunit.xml '''
-
+└── phpunit.xml
+```
 ## Petunjuk Instalasi Lokal
 Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer lokal:
 
