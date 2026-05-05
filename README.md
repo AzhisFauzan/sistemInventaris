@@ -12,9 +12,55 @@ Sistem Informasi Inventaris dan Maintenance Aset IT (PC, Laptop, Printer, dll) b
 - **Frontend:** Bootstrap 
 - **Database:** MySQL
 
-  
-## Petunjuk Instalasi Lokal
+## Struktur project saat ini
 
+sistemInventaris/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AuthCtrl.php
+│   │   ├── Controller.php
+│   │   ├── DashboardCtrl.php
+│   │   ├── KategoriCtrl.php
+│   │   ├── LaporanCtrl.php
+│   │   ├── MaintenanceCtrl.php
+│   │   ├── PerangkatCtrl.php
+│   │   ├── RuanganCtrl.php
+│   │   └── UserCtrl.php
+│   ├── Models/
+│   │   ├── KategoriPerangkat.php
+│   │   ├── Perangkat.php
+│   │   ├── Ruangan.php
+│   │   └── User.php
+│   └── Providers/
+│       └── AppServiceProvider.php
+├── bootstrap/
+│   ├── cache/
+│   │   ├── .gitignore
+│   │   ├── packages.php
+│   │   └── services.php
+│   ├── app.php
+│   └── providers.php
+├── config/
+├── database/
+├── public/
+├── resources/
+├── routes/
+├── storage/
+├── tests/
+├── vendor/
+├── .editorconfig
+├── .env
+├── .env.example
+├── .gitattributes
+├── .gitignore
+├── artisan
+├── composer.json
+├── composer.lock
+├── Dockerfile
+├── package.json
+└── phpunit.xml
+
+## Petunjuk Instalasi Lokal
 Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer lokal:
 
 **1. Clone Repository**
