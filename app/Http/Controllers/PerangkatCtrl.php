@@ -104,7 +104,7 @@ class PerangkatCtrl extends Controller
             'id_ruangan'      => $request->id_ruangan,
             'dipindahkan_oleh' => null,
             'role_pemindah' => null,
-            'tanggal_pemidah' => null,
+            'tanggal_pindah' => null,
         ]);
 
         return back()->with('success', 'Data Perangkat berhasil ditambahkan.');
@@ -123,7 +123,7 @@ class PerangkatCtrl extends Controller
             'id_ruangan'      => $request->id_ruangan,
             'dipindahkan_oleh' => null,
             'role_pemindah' => null,
-            'tanggal_pemindah' => null,
+            'tanggal_pindah' => null,
         ]);
 
         return back()->with('success', 'Data Perangkat berhasil diperbarui.');

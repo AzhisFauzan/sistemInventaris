@@ -16,11 +16,9 @@ class UserCtrl extends Controller
     public function store_user(Request $request)
     {
         $request->validate([
-            'name'     => ['required', 'regex:/^[A-Z\s]+$/'],
             'password' => ['required', 'max:10'],
             'role'     => 'required'
         ], [
-            'name.regex'     => 'Nama/Username harus HURUF BESAR semua.',
             'password.max'   => 'Password maksimal 10 karakter.',
             'name.required'  => 'Nama wajib diisi.',
             'password.required' => 'Password wajib diisi.',
@@ -43,7 +41,6 @@ class UserCtrl extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required', 'regex:/^[A-Z\s]+$/'],
             'role' => 'required',
         ];
 
@@ -52,7 +49,6 @@ class UserCtrl extends Controller
         }
 
         $request->validate($rules, [
-            'name.regex'     => 'Nama harus HURUF BESAR semua.',
             'password.max'   => 'Password baru maksimal harus 10 karakter.',
         ]);
 

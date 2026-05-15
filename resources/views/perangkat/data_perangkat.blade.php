@@ -500,7 +500,7 @@
                         <input type="hidden" name="id_ruangan" value="{{ $data_ruangan->id_ruangan }}">
                         <div class="col-md-6 form-group">
                             <label>Kode Inventaris</label>
-                            <input type="text" name="kode_inventaris" class="form-control" placeholder="Contoh: INV-PC-001">
+                            <input type="text" name="kode_inventaris" class="form-control" placeholder="Contoh: MDN/MG/01...">
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Alamat IP</label>
@@ -551,7 +551,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header modal-header-add">
-                <h5 class="modal-title"><i class="fas fa-desktop mr-2"></i>Detail Perangkat</h5>
+                <h5 class="modal-title">Detail Perangkat</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">
@@ -600,6 +600,15 @@
                 <div class="detail-section-title"><i class="fas fa-microchip mr-1"></i> Spesifikasi</div>
                 <div class="spec-card">
                     <div class="spec-value" id="detail_spesifikasi">-</div>
+                </div>
+                <div class="detail-row" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 0; border-bottom: 1.5px dashed var(--border);">
+
+                    <img id="detail_qrcode_img" alt="QR Code" style="max-width: 200px; border-radius: 6px; display: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+
+                    <button type="button" id="btnDownloadQRCode" class="btn-primary-custom mt-3" style="display: none; font-size: 0.8rem; padding: 6px 14px; border-radius: 20px;">
+                        <i class="fas fa-download mr-1"></i> Download QR Code
+                    </button>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -765,20 +774,56 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
 <script>
     const baseUrl = "{{ url('') }}";
+
+    let teksLabelQRCode = "";
 
     $('#modalDetailperangkat').on('show.bs.modal', function(e) {
         const btn   = $(e.relatedTarget);
         const modal = $(this);
 
-        modal.find('#detail_kode_inventaris').text(btn.data('kode_inventaris') || '-');
+        const kodeInventaris = btn.data('kode_inventaris') || '-';
+        const namaKategori   = btn.data('nama_kategori') || '-';
+        const merek          = btn.data('merek') || '-';
+
+        modal.find('#detail_kode_inventaris').text(kodeInventaris);
         modal.find('#detail_alamat_ip').text(btn.data('alamat_ip') || '-');
-        modal.find('#detail_nama_kategori').text(btn.data('nama_kategori') || '-');
-        modal.find('#detail_merek').text(btn.data('merek') || '-');
+        modal.find('#detail_nama_kategori').text(namaKategori);
+        modal.find('#detail_merek').text(merek);
         modal.find('#detail_tipe').text(btn.data('tipe') || '-');
 
+        const imgDetail = document.getElementById('detail_qrcode_img');
+        const btnDownload = document.getElementById('btnDownloadQRCode'); // Ubah ID-nya
+
+        if(kodeInventaris !== '-') {
+            teksLabelQRCode = kodeInventaris + " - " + namaKategori + " - " + merek;
+
+            QRCode.toDataURL(teksLabelQRCode, {
+                errorCorrectionLevel: 'M',
+                type: 'image/jpeg',
+                quality: 1,
+                margin: 2,
+                width: 250,
+                color: {
+                    dark: "#0f172a",
+                    light: "#ffffff"
+                }
+            }, function (err, url) {
+                if (err) throw err;
+                imgDetail.src = url;
+                imgDetail.style.display = "block";
+                btnDownload.style.display = "inline-block"; // Munculkan tombol download
+            });
+
+        } else {
+            imgDetail.style.display = "none";
+            btnDownload.style.display = "none"; // Sembunyikan tombol download
+        }
+
+        // --- Render data kondisi & pindah (Tetap sama seperti kodemu sebelumnya) ---
         const kondisi = btn.data('kondisi') || '-';
         const badgeMap = {
             'Baik':        '<span class="badge-kondisi baik">Baik</span>',
@@ -790,7 +835,7 @@
 
         const dipindahkanOleh = btn.data('dipindahkan_oleh') || '';
         const rolePemindah    = btn.data('role_pemindah')    || '';
-        const tanggalPindah    = btn.data('tanggal_pindah')    || '';
+        const tanggalPindah   = btn.data('tanggal_pindah')   || '';
 
         if (dipindahkanOleh) {
             modal.find('#detail_dipindahkan_oleh').text(dipindahkanOleh);
@@ -798,11 +843,8 @@
             if (tanggalPindah) {
                 const dt = new Date(tanggalPindah);
                 const formatted = dt.toLocaleString('id-ID', {
-                    day:    '2-digit',
-                    month:  'long',
-                    year:   'numeric',
-                    hour:   '2-digit',
-                    minute: '2-digit',
+                    day:    '2-digit', month:  'long', year:   'numeric',
+                    hour:   '2-digit', minute: '2-digit',
                 });
                 modal.find('#detail_tanggal_pindah').text(formatted);
             } else {
@@ -812,6 +854,23 @@
         } else {
             modal.find('#section_dipindahkan').hide();
         }
+    });
+
+    document.getElementById('btnDownloadQRCode').addEventListener('click', function() {
+        const imgSrc = document.getElementById('detail_qrcode_img').src;
+        const kodeInv = document.getElementById('detail_kode_inventaris').innerText;
+
+        if (!imgSrc || imgSrc === '') return;
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imgSrc;
+
+        const namaFileAman = kodeInv.replace(/[^a-zA-Z0-9]/g, '_');
+        downloadLink.download = 'QRCode_' + namaFileAman + '.jpg';
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     });
 
     $('#modalEditperangkat').on('show.bs.modal', function(e) {

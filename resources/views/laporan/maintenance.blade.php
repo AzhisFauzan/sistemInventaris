@@ -470,7 +470,7 @@
                 <thead>
                     <tr>
                         <th style="text-align: center;">No</th>
-                        <th>ID Main.</th>
+                        <th>Kode Inventaris</th>
                         <th>Kategori</th>
                         <th>Ruangan</th>
                         <th>Teknisi</th>
@@ -482,7 +482,7 @@
                     @forelse($maintenances as $i => $m)
                     <tr>
                         <td class="td-no">{{ $i + 1 }}</td>
-                        <td><span class="td-id">#{{ str_pad($m->id_maintenance, 4, '0', STR_PAD_LEFT) }}</span></td>
+                        <td><span class="td-id">{{ $m->kode_inventaris ?? '-' }}</span></td>
                         <td>
                             <span class="td-badge">
                                 {{ $m->nama_kategori ?? '-' }}

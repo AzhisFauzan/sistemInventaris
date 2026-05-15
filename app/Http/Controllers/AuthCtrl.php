@@ -16,32 +16,23 @@ class AuthCtrl extends Controller
     public function proses_login(Request $request)
     {
         $request->validate([
-            'name' => [
-                'required',
-                'regex:/^[A-Z\s]+$/',
-            ],
-            'password' => [
-                'required',
-                'max:10',
-            ]
+            'name'     => 'required',
+            'password' => 'required|max:20',
         ], [
-            'name.regex' => 'Username harus menggunakan huruf besar semua.',
-            'password.max' => 'Password maximal harus 10 karakter.',
-            'name.required' => 'Username tidak boleh kosong.',
+            'name.required'     => 'Username tidak boleh kosong.',
             'password.required' => 'Password tidak boleh kosong.',
+            'password.max'      => 'Password maksimal 20 karakter.',
         ]);
 
-        $user = DB::table('users')
-            ->where('name', $request->name)
-            ->where('password', $request->password)
-            ->first();
+        $user = DB::table('users')->whereRaw('BINARY name = ?', [$request->name])->where('password', $request->password)->first();
 
-        if ($user) {
-            Auth::loginUsingId($user->id);
-            return redirect('/dashboard')->with('pesan', 'Login Success');
+        if (!$user) {
+            return back()->withErrors(['login_error' => 'Username atau Password salah!'])->withInput();
         }
 
-        return back()->withErrors(['login_error' => 'Username atau Password salah!'])->withInput();
+        Auth::loginUsingId($user->id);
+
+        return redirect('/dashboard')->with('pesan', 'Login Success');
     }
 
     public function logout(Request $request)

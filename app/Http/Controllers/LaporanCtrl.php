@@ -31,7 +31,6 @@ class LaporanCtrl extends Controller
         }
 
         $perangkat = $data_perangkat->get();
-
         return view('laporan.inventaris', compact('perangkat', 'ruangan'));
     }
 
@@ -105,6 +104,9 @@ class LaporanCtrl extends Controller
         ]);
     }
 
+
+
+
     public function maintenance(Request $request)
     {
         $ruangans = DB::table('ruangan')->orderBy('nama_ruangan')->get();
@@ -112,8 +114,18 @@ class LaporanCtrl extends Controller
 
         $query = DB::table('maintenance as m')
             ->leftJoin('kategori_perangkat as k', 'm.id_kategori', '=', 'k.id_kategori')
+            ->leftJoin('perangkat as p', function($join) {
+                $join->on('p.id_kategori', '=', 'm.id_kategori')
+                ->on('p.id_ruangan', '=', 'm.id_ruangan');
+            })
             ->leftJoin('ruangan as r', 'm.id_ruangan', '=', 'r.id_ruangan')
-            ->select('m.*', 'k.nama_kategori', 'r.nama_ruangan');
+            ->select(
+                'm.*',
+                'k.nama_kategori',
+                'r.nama_ruangan',
+                DB::raw("GROUP_CONCAT(p.kode_inventaris SEPARATOR ', ') as kode_inventaris")
+            )
+            ->groupBy('m.id_maintenance', 'k.nama_kategori', 'r.nama_ruangan');
 
         if ($request->filled('id_ruangan')) {
             $query->where('m.id_ruangan', $request->id_ruangan);
@@ -139,9 +151,19 @@ class LaporanCtrl extends Controller
     public function printMaintenance(Request $request)
     {
         $query = DB::table('maintenance as m')
-            ->join('kategori_perangkat as k', 'm.id_kategori', '=', 'k.id_kategori')
-            ->join('ruangan as r', 'm.id_ruangan', '=', 'r.id_ruangan')
-            ->select('m.*', 'k.nama_kategori', 'r.nama_ruangan');
+            ->leftJoin('kategori_perangkat as k', 'm.id_kategori', '=', 'k.id_kategori')
+            ->leftJoin('ruangan as r', 'm.id_ruangan', '=', 'r.id_ruangan')
+            ->leftJoin('perangkat as p', function($join) {
+                $join->on('p.id_kategori', '=', 'm.id_kategori')
+                ->on('p.id_ruangan', '=', 'm.id_ruangan');
+            })
+            ->select(
+                'm.*',
+                'k.nama_kategori',
+                'r.nama_ruangan',
+                DB::raw("GROUP_CONCAT(p.kode_inventaris SEPARATOR ', ') as kode_inventaris")
+            )
+            ->groupBy('m.id_maintenance', 'k.nama_kategori', 'r.nama_ruangan');
 
         if ($request->filled('id_ruangan')) {
             $query->where('m.id_ruangan', $request->id_ruangan);
@@ -164,3 +186,4 @@ class LaporanCtrl extends Controller
         return $pdf->stream('laporan-maintenance-' . now()->format('Ymd') . '.pdf');
     }
 }
+
